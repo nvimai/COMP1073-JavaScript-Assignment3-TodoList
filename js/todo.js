@@ -86,10 +86,9 @@ function addItem() {
   addItemName.focus();
 }
 
-var eventItem;
 // Eidt an item in side the universal list
-function editItem() {
-  let itemName = eventItem.target;
+function editItem(event) {
+  let itemName = event.target;
   let divItemName = itemName.parentNode.querySelector('div');
   // input text
   let editItemName = divItemName.querySelector('.editItemName');
@@ -102,11 +101,13 @@ function editItem() {
   divItemName.style.display = 'unset';
 
   editItemName.focus();
-  applyButton.addEventListener('click', updateItem);
+  applyButton.addEventListener('click', function() {
+    updateItem(event);
+  });
 }
 // Update the item after user hit the apply button
-function updateItem() {
-  let itemName = eventItem.target;
+function updateItem(event) {
+  let itemName = event.target;
   let divItemName = itemName.parentNode.querySelector('div');
   // input text
   let editItemName = divItemName.querySelector('.editItemName');
@@ -138,11 +139,10 @@ unfinishedField.onclick = function(event) {
       finishedField.appendChild(event.target.parentNode);
     }
   }
+  // heading is the element that was clicked
   if (event.target && event.target.className === 'itemName') {
-    // User a variable to handle the event
-    eventItem = event;
     // Revoke the editItem function
-    editItem();
+    editItem(event);
 	}
 };
 finishedField.onclick = function(event) {
@@ -157,11 +157,9 @@ finishedField.onclick = function(event) {
       unfinishedField.appendChild(event.target.parentNode);
     }
   }
-  
+  // heading is the element that was clicked
   if (event.target && event.target.className === 'itemName') {
-    // User a variable to handle the event
-    eventItem = event;
     // Revoke the editItem function
-    editItem();
+    editItem(event);
 	}
 };
