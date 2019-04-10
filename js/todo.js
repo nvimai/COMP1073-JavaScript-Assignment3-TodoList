@@ -1,18 +1,21 @@
 // Declare the variables to hold the elements
 var addItemField = document.getElementById('addItem');
-var unfinishedField = document.getElementById('unfinisedList');
-var finishedField = document.getElementById('finisedList');
+var unfinishedField = document.getElementById('unfinishedList');
+var finishedField = document.getElementById('finishedList');
 var addItemName = addItemField.querySelector('input');
 var addItemSubmit = addItemField.querySelector('button');
 
 // Focus to the text box
 addItemName.focus();
 
-// Create the item list
-var universalList = new Array();
-
 // Add eventListner to the Add item button
-addItemSubmit.addEventListener('click', addItem);
+addItemSubmit.addEventListener('click', function(){
+  if(addItemName.value != '') {
+    addItem(addItemName.value, false);
+  }else {
+    alert('The Item Nam could not be empty');
+  }
+});
 
 // Create the item constructor
 function Universal(isDone, name) {
@@ -22,7 +25,7 @@ function Universal(isDone, name) {
 
 // Create the displayIt function to display item on the list
 Universal.prototype.displayIt = function() {
-  // Create the article element to contain the Checkbox, heading, delete and some more elements of an item
+  // Create the article element to contain the Checkbox, text, delete and some more elements of an item
   var item = document.createElement('article');
   item.classList.add('item');
   
@@ -31,8 +34,8 @@ Universal.prototype.displayIt = function() {
   itemCheck.type = 'checkbox';
   itemCheck.classList = 'checkbox';
 
-  // Create the heading element for the item name
-  var itemName = document.createElement('h3');
+  // Create the text element for the item name
+  var itemName = document.createElement('p');
   itemName.classList.add('itemName');
 
   // Create div to handle the edit item name group
@@ -68,22 +71,24 @@ Universal.prototype.displayIt = function() {
   item.appendChild(editDiv);
   item.appendChild(itemDelete);
   if(this.isDone === true) {
-    finishedField.appendChild(item);
+    finishedField.prepend(item);
   } else {
-    unfinishedField.appendChild(item);
+    unfinishedField.prepend(item);
   }
 }
+// Render some examples
+addItem('COMP1006 Lab 5', true);
+addItem('COMP1073 Assignment 3', true);
+addItem('Workout', false);
 
 // Add an item into the universal list
-function addItem() {
+function addItem(itemName, isDone = false) {
   // If the input is not empty then add an item into the list else display the alert
-  if(addItemName.value != '') {
-    var item = new Universal(false, addItemName.value);
+  if(itemName && itemName != '') {
+    var item = new Universal(isDone, itemName);
     item.displayIt();
-  } else {
-    alert('Please type the item name');
+    playSound('added');
   }
-  addItemName.focus();
 }
 
 // Eidt an item in side the universal list
@@ -119,7 +124,8 @@ function updateItem(event) {
     itemName.style.display = 'unset';
     // Visibly the edit div
     divItemName.style.display = 'none';
-    // item.displayIt();
+    // Play the sound when applied successfully
+    playSound('applied');
   } else {
     alert('Please type the item name');
     editItemName.focus();
@@ -131,12 +137,16 @@ unfinishedField.onclick = function(event) {
 	//delete button is the element that was clicked
 	if (event.target && event.target.nodeName === 'BUTTON' && event.target.className === 'delete') {
 		event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+    // Play the sound when deleted successfully
+    playSound('deleted');
   }
   // checkbox is the element that was clicked
 	if (event.target && event.target.nodeName === 'INPUT' && event.target.className === 'checkbox') {
     if(event.target.checked === true)
     {
-      finishedField.appendChild(event.target.parentNode);
+      finishedField.prepend(event.target.parentNode);
+      // Play the sound when done
+      playSound('done');
     }
   }
   // heading is the element that was clicked
@@ -149,12 +159,16 @@ finishedField.onclick = function(event) {
 	// delete button is the element that was clicked
 	if (event.target && event.target.nodeName === 'BUTTON' && event.target.className === 'delete') {
 		event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+    // Play the sound when deleted successfully
+    playSound('deleted');
   }
   // checkbox is the element that was clicked
 	if (event.target && event.target.nodeName === 'INPUT' && event.target.className === 'checkbox') {
     if(event.target.checked === false)
     {
-      unfinishedField.appendChild(event.target.parentNode);
+      unfinishedField.prepend(event.target.parentNode);
+      // Play the sound when incompleted
+      playSound('unfinished');
     }
   }
   // heading is the element that was clicked
@@ -163,3 +177,29 @@ finishedField.onclick = function(event) {
     editItem(event);
 	}
 };
+
+// Play audios
+function playSound(type) {
+  let audioFile;
+  if(type){
+    switch(type) {
+      case 'added' : audioFile = 'audios/GlassPing.wav'; break;
+      case 'deleted' : audioFile = 'audios/GunFire.wav'; break;
+      case 'applied' : audioFile = 'audios/HornHonk.wav'; break;
+      case 'unfinished' : audioFile = 'audios/ATone.wav'; break;
+      case 'done' : audioFile = 'audios/Tada.wav'; break;
+    }
+    let sound = new Audio(audioFile); // buffers automatically when created
+    var playPromise = sound.play();
+
+  // Credit to https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+  if (playPromise !== undefined) {
+    playPromise.then(play => {
+      // Automatic playback started!
+    })
+    .catch(error => {
+      // Auto-play was prevented
+    });
+  }
+  }
+}

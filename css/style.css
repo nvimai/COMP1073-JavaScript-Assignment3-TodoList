@@ -1,31 +1,53 @@
 @charset "utf-8";
 
-fieldset {
+body {
   text-align: center;
+}
+
+h1, h2 {
+  color: forestgreen;
 }
 
 article.item {
   display: flex;
   display: -webkit-flex;
-  margin: 0 auto;
   padding: 10px;
-  max-width: 500px;
   text-align: center;
   justify-content: space-between;
 }
 
+fieldset {
+  text-align: center;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin: 0 auto;
+  max-width: 500px;
+}
+fieldset[id=addItem] {
+  border-top-color:yellow;
+}
+fieldset[id=unfinishedList] {
+  border-top-color:orange;
+}
+fieldset[id=finishedList] {
+  border-top-color:green;
+}
+
 /* Lists */
-#unfinisedList article.item:nth-child(odd) {
+#unfinishedList article.item:nth-child(odd) {
   background-color: rgba(204, 146, 67, 0.5);
 }
-#finisedList article.item:nth-child(odd) {
-  background-color: rgba(0, 100, 0, 0.7);
-}
-#unfinisedList article.item:hover {
-  background-color: rgba(150,0,0,0.5);
-}
-#finisedList article.item:hover {
+#finishedList article.item:nth-child(odd) {
   background-color: rgba(0,150,0,0.5);
+}
+#unfinishedList article.item:hover {
+  background-color: rgba(150,0,0,0.5);
+  color: white;
+}
+#finishedList article.item:hover {
+  background-color: rgba(0, 100, 0, 0.7);
+  color: white;
 }
 
 /* Checkbox on the list */
@@ -34,22 +56,36 @@ article.item .checkbox {
 }
 /* Item Name on the list */
 article.item .itemName {
-  margin: 0 10px;
+  margin: auto 10px;
+  width: 100%;
+}
+
+article.item .itemName:hover {
+  border: 1px solid #ccc;
+  cursor: text;
+}
+
+input[type=text] {
+  padding: 4px;
+  font-size: 1em;
+  box-shadow: 0 0 5px red;
+  border-color: #ff00006e;
 }
 
 /* Buttons 
 *****/
+button {
+  width: 80px;
+  color: white;
+  background-color: rgb(0, 30, 200);
+  padding: 5px;
+  font-size: 1em;
+}
+
 article.item .delete {
   background-color: rgb(177, 0, 0);
 }
 
 article.item .apply {
   background-color: rgb(0, 150, 0);
-}
-
-button {
-  width: 50px;
-  color: white;
-  background-color: rgb(0, 30, 200);
-  padding: 5px;
 }

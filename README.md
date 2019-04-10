@@ -1,4 +1,4 @@
-# COMP1073 - JavaScript - Assignment 3 - Todo List
+# COMP1073 - JavaScript - Assignment 3 - To-do List
 ## 200385752 - Nhat Mai (Nvi)
 ### DESCRIPTION
 Assemble a simple to-do list application that uses a few simple HTML elements, some CSS,
@@ -22,7 +22,8 @@ property, and it is moved to the bottom of the list of to-dos.
 clicks on the delete `<button>` element.
 ### TAKE IT FURTHER
 1. Edit the to-do name
-2. 
+2. Added some sounds for the events
+3. Show up the edit field when hover the item name
 
 ### License
 Copyright © 2019, [Nvi Mai](https://www.nvimai.com).
